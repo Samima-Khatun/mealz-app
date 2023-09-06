@@ -25,7 +25,7 @@ import com.example.mealzapp.model.response.MealsResponse
 import com.example.mealzapp.ui.theme.MealzAppTheme
 
 @Composable
-fun MealsCategoriesScreen() {
+fun MealsCategoriesScreen(navigationCallback: (String) -> Unit) {
     val viewModel: MealsCategoriesViewModel = viewModel()
 /*    val rememberedMeals: MutableState<List<MealsResponse>> =
         remember { mutableStateOf(emptyList<MealsResponse>()) }*/
@@ -41,13 +41,13 @@ fun MealsCategoriesScreen() {
     val meals = viewModel.mealsState.value
     LazyColumn(contentPadding = PaddingValues(16.dp)) {
         items(meals) { meal ->
-            MealCategory(meal = meal)
+            MealCategory(meal = meal, navigationCallback)
         }
     }
 }
 
 @Composable
-fun MealCategory(meal: MealsResponse) {
+fun MealCategory(meal: MealsResponse, navigationCallback: (String) -> Unit) {
     var isExpanded by remember { mutableStateOf(false) }
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -55,6 +55,7 @@ fun MealCategory(meal: MealsResponse) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
+            .clickable { navigationCallback(meal.id) }
     ) {
         Row(
             modifier = Modifier.animateContentSize()
